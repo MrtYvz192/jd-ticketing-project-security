@@ -13,6 +13,7 @@ import com.cybertek.service.TaskService;
 import com.cybertek.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +26,14 @@ public class UserServiceImpl implements UserService {
     private ProjectService projectService;
     private TaskService taskService;
     private MappaerUtil mappaerUtil;
+    private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, @Lazy ProjectService projectService, TaskService taskService, MappaerUtil mappaerUtil) {
+    public UserServiceImpl(UserRepository userRepository, ProjectService projectService, TaskService taskService, MappaerUtil mappaerUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.projectService = projectService;
         this.taskService = taskService;
         this.mappaerUtil = mappaerUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -49,7 +52,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(UserDTO dto) {
+
+        User foundUser = userRepository.findByUserName(dto.getUserName()); // why to create foundUser??
+        dto.setEnabled(true);
+
         User user = mappaerUtil.convert(dto, new User());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
