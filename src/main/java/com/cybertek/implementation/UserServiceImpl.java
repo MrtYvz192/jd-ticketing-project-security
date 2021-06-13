@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private MappaerUtil mappaerUtil;
     private PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, ProjectService projectService, TaskService taskService, MappaerUtil mappaerUtil, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, @Lazy ProjectService projectService, TaskService taskService, MappaerUtil mappaerUtil, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.projectService = projectService;
         this.taskService = taskService;
@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(UserDTO dto) {
 
-        User foundUser = userRepository.findByUserName(dto.getUserName()); // why to create foundUser??
         dto.setEnabled(true);
 
         User user = mappaerUtil.convert(dto, new User());
