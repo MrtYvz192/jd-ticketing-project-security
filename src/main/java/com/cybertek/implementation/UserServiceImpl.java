@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
         User convertedUser = mappaerUtil.convert(dto, new User());
 
         convertedUser.setId(user.getId());
+        convertedUser.setPassword(passwordEncoder.encode(convertedUser.getPassword()));
         userRepository.save(convertedUser);
 
         return findByUserName(dto.getUserName());
