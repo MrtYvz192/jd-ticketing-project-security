@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
 
         convertedUser.setId(user.getId());
         convertedUser.setPassword(passwordEncoder.encode(convertedUser.getPassword()));
+        convertedUser.setEnabled(true);
         userRepository.save(convertedUser);
 
         return findByUserName(dto.getUserName());
