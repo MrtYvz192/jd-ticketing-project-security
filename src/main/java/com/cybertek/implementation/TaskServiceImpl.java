@@ -11,6 +11,7 @@ import com.cybertek.mapper.TaskMapper;
 import com.cybertek.repositories.TaskRepository;
 import com.cybertek.repositories.UserRepository;
 import com.cybertek.service.TaskService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -103,14 +104,20 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> listAllTasksByStatusIsNot(Status status) {
-        User user = userRepository.findByUserName("mememe@me.com");
+        //getting the username based on the logged in user
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUserName(username);
         List<Task>  list = taskRepository.findAllByTaskStatusIsNotAndAssignedEmployee(status,user);
         return list.stream().map(task -> taskMapper.convertToDTO(task)).collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDTO> listAllTasksByProjectManager() {
-        User user = userRepository.findByUserName("me@me.com");
+        //getting the username based on the logged in user
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUserName(username);
         List<Task> list = taskRepository.findAllByProjectAssignedManager(user);
         return list.stream().map(task -> taskMapper.convertToDTO(task)).collect(Collectors.toList());
     }
@@ -126,7 +133,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskDTO> listAllTasksByStatus(Status status) {
-        User user = userRepository.findByUserName("mememe@me.com");
+        //getting the username based on the logged in user
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user = userRepository.findByUserName(username);
         List<Task>  list = taskRepository.findAllByTaskStatusIsAndAssignedEmployee(status,user);
         return list.stream().map(task -> taskMapper.convertToDTO(task)).collect(Collectors.toList());
     }
