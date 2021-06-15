@@ -120,9 +120,9 @@
                                             <div class="col-lg-6 col-sm-6">
                                                 <div class="form-group">
                                                     <label for="role-id">Role</label>
-                                                    <select class="form-control" id="role-id" th:field="*{role}">
-                                                        <option th:each="role : ${roles}" th:text="${role.description}" th:value="${role.id}"
-                                                                th:selected="${role.id}==${user.role.id}"></option>
+                                                    <select class="form-control" name="role" id="role-id"> <!-- th:field="*{role}" is causing problem when used with th:selected -->
+                                                        <option th:each="r : ${roles}" th:text="${r.description}" th:value="${r.id}"
+                                                                th:selected="(${r.id} == *{role.id})"></option>
                                                     </select><br>
                                                     <button type="submit" class="btn btn-success fa-pull-right">Save</button><br><br>
                                                 </div>
